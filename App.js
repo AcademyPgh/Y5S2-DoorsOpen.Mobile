@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import { Button, View, Text, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -31,8 +31,16 @@ function ListScreen({ route, navigation }) {
       <FlatList
         data={data}
         renderItem={
-          ({item}) => <ScrollView>
+          ({item}) => <ImageBackground source={{uri: item.imageURL}} style={{width: '100%', height: '50%'}}>
             <Text>{item.building}</Text>
+            {/* Image
+            name
+            address
+            time
+            accessibility bools
+              toilet
+              wheelchair
+              photography */}
             <Button
         title="Go to Details"
         onPress={() => {
@@ -43,7 +51,7 @@ function ListScreen({ route, navigation }) {
           });
         }}
       />
-            </ScrollView>
+            </ImageBackground>
         }
       />
       )}
