@@ -15,7 +15,6 @@ const red = 'e45027';
 const darkblue = '#038a9c';
 const darkred = '#bd3712';
 
-
 const styles = StyleSheet.create({
   homeFlatList: {
     width: '100%',
