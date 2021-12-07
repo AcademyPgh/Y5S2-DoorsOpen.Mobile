@@ -102,6 +102,7 @@ function DetailsScreen({ route, navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Details about Building!</Text>
+      <Text>Git Test!</Text>
       <Text>{route.params.building}</Text>
       <Text>{route.params.historicalOverview}</Text>
       <Text>{route.params.visitorExperience}</Text>
