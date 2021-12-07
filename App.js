@@ -79,7 +79,7 @@ function ListScreen({ route, navigation }) {
                     <Text>{item.building}</Text>
                     <Text>{item.address1} | {item.startTime}-{item.endTime}</Text>
                     <Toilet width={20} height={20} color={darkblue} />
-                    <Text>Accessibility Icons{item.wheelchairAccessible}{item.restroomsAvailable}{item.photographyAllowed}</Text>
+                    <Text>Splimboid{item.wheelchairAccessible}{item.restroomsAvailable}{item.photographyAllowed}</Text>
                   </View>
                   {/* Image
             name
