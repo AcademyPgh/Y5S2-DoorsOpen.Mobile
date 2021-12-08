@@ -1,8 +1,8 @@
 import React, { Component, useEffect, useState } from "react";
-import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, StyleSheet, TouchableWithoutFeedback, Appearance } from 'react-native';
+import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, StyleSheet, TouchableWithoutFeedback, Appearance, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Toilet from "./assets/toilet-solid.svg";
+import Toilet from "./assets/icons/toilet-solid.svg";
 
 // const colorScheme = Appearance.getColorScheme(); // this should get light/dark mode from the os i think? would put these palettes in an if statement somewhere for that
 const black = '#242325';
@@ -170,12 +170,16 @@ function DetailsScreen({ route, navigation }) {
 
 const Stack = createNativeStackNavigator();
 
+function LogoTitle() {
+  return (<Image source={require('./assets/images/dooropen.jpg')} style={{position: 'relative', left: -23, height: 60, margin: 4, width: '100%', resizeMode: 'contain',}} />)
+}
+
 function App() {
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="List">
-        <Stack.Screen name="List" component={ListScreen} />
+        <Stack.Screen name="List" component={ListScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
