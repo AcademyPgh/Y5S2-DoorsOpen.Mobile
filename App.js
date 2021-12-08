@@ -171,7 +171,7 @@ function DetailsScreen({ route, navigation }) {
 const Stack = createNativeStackNavigator();
 
 function LogoTitle() {
-  return (<Image source={require('./assets/images/dooropen.jpg')} style={{position: 'relative', left: -23, height: 60, margin: 4, width: '100%', resizeMode: 'contain',}} />)
+  return (<Image source={require('./assets/images/dooropen.jpg')} style={{height: 50, marginBottom: 4, marginTop: 25, width: '100%', resizeMode: 'contain',}} />)
 }
 
 function App() {
@@ -179,7 +179,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="List">
-        <Stack.Screen name="List" component={ListScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
+        <Stack.Screen name="List" component={ListScreen} options={{header: (props) => <LogoTitle {...props}/>}} />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
