@@ -15,6 +15,30 @@ const red = 'e45027';
 const darkblue = '#038a9c';
 const darkred = '#bd3712';
 
+function BodyText(props) {
+  return (
+    <Text style={styles.body}>
+      {props.children}
+    </Text>
+  );
+}
+
+function HeaderText(props) {
+  var output;
+  if(props.children.length > 40) {
+    output = props.children.substring(0, 40) + "...";
+  }
+  else {
+    output = props.children;
+  }
+
+  return (
+    <Text style={styles.header}>
+      {output}
+    </Text>
+  );
+}
+
 const styles = StyleSheet.create({
   homeFlatList: {
     width: '100%',
@@ -30,11 +54,40 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   homeBuildingCard: {
-    width: '90%',
+    width: '98%',
     backgroundColor: white,
+    marginBottom: 10,
+    padding: 10,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+  },
+  homeBuildingCardTop: {
+    width: '98%',
+    height: 20,
+    backgroundColor: red,
+  },
+  body: {
+    fontFamily: "Poppins-Regular",
     color: black,
-    margin: 10,
-  }
+    fontSize: 13,
+  },
+  header: {
+    fontFamily: "Poppins-SemiBold",
+    color: black,
+    fontSize: 16,
+  },
+  align: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 })
 
 function ListScreen({ route, navigation }) {
@@ -75,11 +128,16 @@ function ListScreen({ route, navigation }) {
                   });
                 }}>
                 <ImageBackground source={{ uri: item.imageURL }} style={styles.homeBuildingDisplay}>
+                  <View style={styles.homeBuildingCardTop} />
                   <View style={styles.homeBuildingCard}>
-                    <Text>{item.building}</Text>
-                    <Text>{item.address1} | {item.startTime}-{item.endTime}</Text>
-                    <Toilet width={20} height={20} color={darkblue} />
-                    <Text>Splimboid{item.wheelchairAccessible}{item.restroomsAvailable}{item.photographyAllowed}</Text>
+                    <HeaderText>{item.building}</HeaderText>
+                    <View style={styles.align}>
+                      <BodyText>{item.address1}</BodyText>
+                      <Toilet width={20} height={20} color={darkblue} />
+                    </View>
+                    {/* {item.startTime}-{item.endTime} */}
+
+                    {/* <BodyText>{item.wheelchairAccessible}{item.restroomsAvailable}{item.photographyAllowed}</BodyText> */}
                   </View>
                   {/* Image
             name
