@@ -1,12 +1,12 @@
 import React, { Component, useEffect, useState } from "react";
-import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, StyleSheet, TouchableWithoutFeedback, Appearance, Image } from 'react-native';
+import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, StyleSheet, TouchableWithoutFeedback, Appearance, Image, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toilet from "./assets/icons/toilet-solid.svg";
 
 // const colorScheme = Appearance.getColorScheme(); // this should get light/dark mode from the os i think? would put these palettes in an if statement somewhere for that
 const black = '#242325';
-const white = '#eeeeee';
+const white = '#fff';
 const gray = '#d2d2d4';
 const lightgray = '#dcdcdc';
 
@@ -40,6 +40,13 @@ function HeaderText(props) {
 }
 
 const styles = StyleSheet.create({
+  homeHeader: {
+    height: 50, 
+    width: '100%', 
+    resizeMode: 'contain',
+    marginBottom: 4, 
+    marginTop: Platform.OS === 'ios' ? 40 : 4,
+  },
   homeFlatList: {
     width: '100%',
     backgroundColor: gray,
@@ -54,6 +61,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   homeBuildingCard: {
+    borderBottomStartRadius: 4,
+    borderBottomEndRadius: 4,
+    borderTopEndRadius: 4,
+    borderTopStartRadius: 4,
     width: '98%',
     backgroundColor: white,
     marginBottom: 10,
@@ -68,11 +79,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
 
     elevation: 4,
-  },
-  homeBuildingCardTop: {
-    width: '98%',
-    height: 20,
-    backgroundColor: red,
   },
   body: {
     fontFamily: "Poppins-Regular",
@@ -171,7 +177,7 @@ function DetailsScreen({ route, navigation }) {
 const Stack = createNativeStackNavigator();
 
 function LogoTitle() {
-  return (<Image source={require('./assets/images/dooropen.jpg')} style={{height: 50, marginBottom: 4, marginTop: 25, width: '100%', resizeMode: 'contain',}} />)
+  return (<Image source={require('./assets/images/dooropen.jpg')} style={styles.homeHeader} />)
 }
 
 function App() {
