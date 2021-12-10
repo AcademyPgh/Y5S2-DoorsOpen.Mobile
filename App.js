@@ -1,12 +1,12 @@
 import React, { Component, useEffect, useState } from "react";
-import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, StyleSheet, TouchableWithoutFeedback, Appearance } from 'react-native';
+import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, StyleSheet, TouchableWithoutFeedback, Appearance, Image, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Toilet from "./assets/toilet-solid.svg";
+import Toilet from "./assets/icons/toilet-solid.svg";
 
 // const colorScheme = Appearance.getColorScheme(); // this should get light/dark mode from the os i think? would put these palettes in an if statement somewhere for that
 const black = '#242325';
-const white = '#eeeeee';
+const white = '#fff';
 const gray = '#d2d2d4';
 const lightgray = '#dcdcdc';
 
@@ -15,7 +15,38 @@ const red = 'e45027';
 const darkblue = '#038a9c';
 const darkred = '#bd3712';
 
+function BodyText(props) {
+  return (
+    <Text style={styles.body}>
+      {props.children}
+    </Text>
+  );
+}
+
+function HeaderText(props) {
+  var output;
+  if(props.children.length > 40) {
+    output = props.children.substring(0, 40) + "...";
+  }
+  else {
+    output = props.children;
+  }
+
+  return (
+    <Text style={styles.header}>
+      {output}
+    </Text>
+  );
+}
+
 const styles = StyleSheet.create({
+  homeHeader: {
+    height: 50, 
+    width: '100%', 
+    resizeMode: 'contain',
+    marginBottom: 4, 
+    marginTop: Platform.OS === 'ios' ? 40 : 4,
+  },
   homeFlatList: {
     width: '100%',
     backgroundColor: gray,
@@ -30,11 +61,39 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   homeBuildingCard: {
-    width: '90%',
+    borderBottomStartRadius: 4,
+    borderBottomEndRadius: 4,
+    borderTopEndRadius: 4,
+    borderTopStartRadius: 4,
+    width: '98%',
     backgroundColor: white,
+    marginBottom: 10,
+    padding: 10,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+  },
+  body: {
+    fontFamily: "Poppins-Regular",
     color: black,
-    margin: 10,
-  }
+    fontSize: 13,
+  },
+  header: {
+    fontFamily: "Poppins-SemiBold",
+    color: black,
+    fontSize: 16,
+  },
+  align: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 })
 
 function ListScreen({ route, navigation }) {
@@ -75,11 +134,16 @@ function ListScreen({ route, navigation }) {
                   });
                 }}>
                 <ImageBackground source={{ uri: item.imageURL }} style={styles.homeBuildingDisplay}>
+                  <View style={styles.homeBuildingCardTop} />
                   <View style={styles.homeBuildingCard}>
-                    <Text>{item.building}</Text>
-                    <Text>{item.address1} | {item.startTime}-{item.endTime}</Text>
-                    <Toilet width={20} height={20} color={darkblue} />
-                    <Text>Accessibility Icons{item.wheelchairAccessible}{item.restroomsAvailable}{item.photographyAllowed}</Text>
+                    <HeaderText>{item.building}</HeaderText>
+                    <View style={styles.align}>
+                      <BodyText>{item.address1}</BodyText>
+                      <Toilet width={20} height={20} color={darkblue} />
+                    </View>
+                    {/* {item.startTime}-{item.endTime} */}
+
+                    {/* <BodyText>{item.wheelchairAccessible}{item.restroomsAvailable}{item.photographyAllowed}</BodyText> */}
                   </View>
                   {/* Image
             name
@@ -113,12 +177,16 @@ function DetailsScreen({ route, navigation }) {
 
 const Stack = createNativeStackNavigator();
 
+function LogoTitle() {
+  return (<Image source={require('./assets/images/dooropen.jpg')} style={styles.homeHeader} />)
+}
+
 function App() {
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="List">
-        <Stack.Screen name="List" component={ListScreen} />
+        <Stack.Screen name="List" component={ListScreen} options={{header: (props) => <LogoTitle {...props}/>}} />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
