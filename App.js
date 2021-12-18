@@ -3,8 +3,12 @@ import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackg
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toilet from "./assets/icons/toilet-solid.svg";
+import NoToilet from "./assets/icons/no-toilet-solid.svg";
+import WheelChair from "./assets/icons/wheelchair-solid.svg";
+import Camera from "./assets/icons/camera-solid.svg";
 
 // const colorScheme = Appearance.getColorScheme(); // this should get light/dark mode from the os i think? would put these palettes in an if statement somewhere for that
+
 const black = '#242325';
 const white = '#fff';
 const gray = '#d2d2d4';
@@ -14,6 +18,30 @@ const blue = '#23bdb9';
 const red = 'e45027';
 const darkblue = '#038a9c';
 const darkred = '#bd3712';
+
+function WheelChairDisplay(props) {
+  const isHandicap = props.isHandicap;
+  if (isHandicap) {
+    return <WheelChair width={20} height={20} color={darkblue} />;
+  }
+  return null;
+}
+
+function CameraDisplay(props) {
+  const allowsPhotoghraphy = props.allowsPhotoghraphy;
+  if (allowsPhotoghraphy) {
+    return <Camera width={20} height={20} color={darkblue} />;
+  }
+  return null;
+}
+
+function BathroomDisplay(props) {
+  const hasBathroom = props.hasBathroom;
+  if (hasBathroom) {
+    return <Toilet width={20} height={20} color={darkblue} />;
+  }
+  return <NoToilet width={20} height={20} color={darkblue} />;
+}
 
 function BodyText(props) {
   return (
@@ -40,7 +68,6 @@ function HeaderText(props) {
 }
 
 const styles = StyleSheet.create({
-
   homeHeader: {
     height: 50, 
     width: '100%', 
@@ -234,7 +261,10 @@ function ListScreen({ route, navigation }) {
                     <HeaderText>{item.building}</HeaderText>
                     <View style={styles.align}>
                       <BodyText>{item.address1}</BodyText>
-                      <Toilet width={20} height={20} color={darkblue} />
+                      <BathroomDisplay hasBathroom={item.restroomsAvailable}/>
+                      <WheelChairDisplay isHandicap={item.wheelchairAccessible}/>
+                      <CameraDisplay allowsPhotoghraphy={item.photographyAllowed}/>
+                      {/* <NoToilet width={20} height={20} color={darkblue} /> */}
                     </View>
                     {/* {item.startTime}-{item.endTime} */}
 
