@@ -40,6 +40,7 @@ function HeaderText(props) {
 }
 
 const styles = StyleSheet.create({
+
   homeHeader: {
     height: 50, 
     width: '100%', 
@@ -90,10 +91,95 @@ const styles = StyleSheet.create({
     color: black,
     fontSize: 16,
   },
+  header2: {
+    fontFamily: "Poppins-SemiBold",
+    color: black,
+    fontSize: 16,
+    marginTop: 15,
+    marginLeft: 20,
+    marginRight: 15,
+    marginBottom: 5,
+  },
+  header3: {
+    fontFamily: "Poppins-SemiBold",
+    color: black,
+    fontSize: 14,
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight: 15,
+    marginBottom: 5,
+  },
+  header4: {
+    fontFamily: "Poppins-SemiBold",
+    color: black,
+    fontSize: 14,
+    marginTop: 10,
+    textAlign: "center",
+
+  },
   align: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  details: {
+    flex: 1, 
+  },
+  detailPic: {
+    height: 210,
+    minWidth: '100%',
+    resizeMode: 'cover',
+  },
+  genBody: {
+    marginLeft: 20,
+    marginRight: 15,
+    lineHeight: 20,
+    paddingBottom: 10,
+  },
+  address: {
+    marginLeft: 20,
+    marginRight: 20,
+    lineHeight: 18,
+    paddingBottom: 5,
+    fontSize: 14,
+  },
+  detailTitleBox: {
+    backgroundColor: white,
+    paddingBottom: 10,
+    margin: 15,
+    marginTop: -25,
+    marginBottom: 5,
+    borderColor: '#e45027', 
+    borderStyle: "solid",
+    borderTopWidth: 4,
+  },
+  detailBox: {
+    backgroundColor: white,
+    paddingTop: 5,
+    paddingBottom: 10,
+    margin: 15,
+    marginTop: 5,
+    marginBottom: 5,
+    borderColor: '#23bdb9', 
+    borderStyle: "solid",
+    borderTopWidth: 4,
+  },
+  twoColumn: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 5,
+  },
+  threeRows: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  shortRows: {
+    backgroundColor: white,
+    marginRight: 15,
+    marginTop: 3,
+    textAlign: "center",
+  }
 })
 
 function ListScreen({ route, navigation }) {
@@ -118,7 +204,6 @@ function ListScreen({ route, navigation }) {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      {/* <Text>List of Buildings!</Text> */}
       {isLoading ? <ActivityIndicator /> : (
         <FlatList
           style={styles.homeFlatList}
@@ -131,6 +216,16 @@ function ListScreen({ route, navigation }) {
                     building: item.building,
                     historicalOverview: item.historicalOverview,
                     visitorExperience: item.visitorExperience,
+                    imageURL: item.imageURL,
+                    address1: item.address1,
+                    address2: item.address2,
+                    city: item.city,
+                    state: item.state,
+                    zip: item.zip,
+                    capacity: item.capacity,
+                    startTime: item.startTime,
+                    endTime: item.endTime,
+                    photography: item.photographyAllowed,
                   });
                 }}>
                 <ImageBackground source={{ uri: item.imageURL }} style={styles.homeBuildingDisplay}>
@@ -164,13 +259,60 @@ function ListScreen({ route, navigation }) {
 
 function DetailsScreen({ route, navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details about Building!</Text>
-      <Text>{route.params.building}</Text>
-      <Text>{route.params.historicalOverview}</Text>
-      <Text>{route.params.visitorExperience}</Text>
+    <ScrollView style={styles.details}>
+      <Image source={{ uri: route.params.imageURL}} style={styles.detailPic}></Image>
+      
+      <View style={styles.detailTitleBox}>
+        <Text style={styles.header2}>{route.params.building}</Text> 
+        <View style={styles.twoColumn}> 
+          <View style={{paddingTop: 4}}>
+            <Text style={styles.address}>{route.params.address1}</Text>
+            <Text style={styles.address}>{route.params.address2}</Text>
+          </View>
+          <View style={{paddingTop: 4}}>
+            <Text style={styles.address}>{route.params.city}</Text>
+            <Text style={styles.address}>{route.params.state}</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.twoColumn}>
+        <View style={{backgroundColor: white, marginLeft: 15, marginTop: 3, textAlign: "center", width: "50%",}}>
+          <Text style={styles.header4}>Accessibility</Text>
+        </View>
+        <View>
+          <View style={styles.threeRows}>
+            <View style={styles.shortRows} >
+              <Text style={styles.header4}>Capacity</Text>
+              <Text style={{textAlign: "center", paddingBottom: 12}}>{route.params.capacity}</Text>
+            </View>
+            <View style={styles.shortRows}>
+              <Text style={styles.header4}>Hours</Text>
+              <Text style={{textAlign: "center", paddingBottom: 12}}>{route.params.startTime} - {route.params.endTime}</Text>
+            </View>
+            <View style={styles.shortRows}>
+              <Text style={styles.header3}>Photography</Text>
+              <Text style={{textAlign: "center", paddingBottom: 12}}>{route.params.photography}</Text>
+            </View>
+          </View>
+        </View>
+        {/* Need to add accessibility, capacity, hours, and photography */}
+      </View>
+      
+      <View style={styles.detailBox}>
+        <Text style={styles.header3}>Visitor Experience</Text>
+        <Text style={styles.genBody}>{route.params.historicalOverview}</Text>
+      </View>
+      <View style={styles.detailBox}>
+        <Text style={styles.header3}>History</Text>
+        <Text style={styles.genBody}>{route.params.visitorExperience}</Text>
+      </View>
+
+      <View style={{height: 10}}></View> 
+      {/* just adds some height to the bottom */}
+
       {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
-    </View>
+    </ScrollView>
   );
 }
 
@@ -186,7 +328,7 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="List">
         <Stack.Screen name="List" component={ListScreen} options={{header: (props) => <LogoTitle {...props}/>}} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} options={({route}) => ({title: route.params.building})} />
       </Stack.Navigator>
     </NavigationContainer>
   );
