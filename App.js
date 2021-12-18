@@ -22,7 +22,7 @@ const darkred = '#bd3712';
 function WheelChairDisplay(props) {
   const isHandicap = props.isHandicap;
   if (isHandicap) {
-    return <WheelChair width={20} height={20} color={darkblue} />;
+    return <WheelChair style={styles.iconContainer} width={20} height={20} color={darkblue} />;
   }
   return null;
 }
@@ -30,7 +30,7 @@ function WheelChairDisplay(props) {
 function CameraDisplay(props) {
   const allowsPhotoghraphy = props.allowsPhotoghraphy;
   if (allowsPhotoghraphy) {
-    return <Camera width={20} height={20} color={darkblue} />;
+    return <Camera style={styles.iconContainer} width={20} height={20} color={darkblue} />;
   }
   return null;
 }
@@ -38,7 +38,7 @@ function CameraDisplay(props) {
 function BathroomDisplay(props) {
   const hasBathroom = props.hasBathroom;
   if (hasBathroom) {
-    return <Toilet width={20} height={20} color={darkblue} />;
+    return <Toilet style={styles.iconContainer} width={20} height={20} color={darkblue} />;
   }
   return <NoToilet width={20} height={20} color={darkblue} />;
 }
@@ -122,6 +122,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  leftContainer: {
+    width: '50%',
+
+  },
+  rightContainer: {
+    width: '50%',
+    flexDirection: 'row-reverse',
+  },
+  iconContainer: {
+    marginLeft: 15,
+  },
 })
 
 function ListScreen({ route, navigation }) {
@@ -146,7 +157,6 @@ function ListScreen({ route, navigation }) {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      {/* <Text>List of Buildings!</Text> */}
       {isLoading ? <ActivityIndicator /> : (
         <FlatList
           style={styles.homeFlatList}
@@ -162,28 +172,19 @@ function ListScreen({ route, navigation }) {
                   });
                 }}>
                 <ImageBackground source={{ uri: item.imageURL }} style={styles.homeBuildingDisplay}>
-                  <View style={styles.homeBuildingCardTop} />
                   <View style={styles.homeBuildingCard}>
                     <HeaderText>{item.building}</HeaderText>
                     <View style={styles.align}>
-                      <BodyText>{item.address1}</BodyText>
-                      <BathroomDisplay hasBathroom={item.restroomsAvailable}/>
-                      <WheelChairDisplay isHandicap={item.wheelchairAccessible}/>
-                      <CameraDisplay allowsPhotoghraphy={item.photographyAllowed}/>
-                      {/* <NoToilet width={20} height={20} color={darkblue} /> */}
+                      <View style={styles.leftContainer}>
+                        <BodyText>{item.address1}</BodyText>
+                      </View>
+                      <View style={styles.rightContainer}>
+                        <BathroomDisplay hasBathroom={item.restroomsAvailable}/>
+                        <WheelChairDisplay isHandicap={item.wheelchairAccessible}/>
+                        <CameraDisplay allowsPhotoghraphy={item.photographyAllowed}/>
+                      </View>
                     </View>
-                    {/* {item.startTime}-{item.endTime} */}
-
-                    {/* <BodyText>{item.wheelchairAccessible}{item.restroomsAvailable}{item.photographyAllowed}</BodyText> */}
                   </View>
-                  {/* Image
-            name
-            address
-            time
-            accessibility bools
-              toilet
-              wheelchair
-              photography */}
                 </ImageBackground>
               </TouchableWithoutFeedback>
           }
@@ -201,7 +202,6 @@ function DetailsScreen({ route, navigation }) {
       <Text>{route.params.building}</Text>
       <Text>{route.params.historicalOverview}</Text>
       <Text>{route.params.visitorExperience}</Text>
-      {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
     </View>
   );
 }
