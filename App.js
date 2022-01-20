@@ -8,6 +8,7 @@ import WheelChair from "./assets/icons/wheelchair-solid.svg";
 import Camera from "./assets/icons/camera-solid.svg";
 import GenderInclusive from "./assets/icons/transgender-alt-solid.svg";
 import GeoLocation from "./assets/icons/geo-location.svg";
+import Clock from "./assets/icons/clock.svg";
 
 const black = '#242325';
 const white = '#fff';
@@ -94,8 +95,15 @@ const styles = StyleSheet.create({
     marginTop: 6,
     marginLeft: -5,
   },
+  timeMargin: {
+    marginTop: 6,
+    marginLeft: -3,
+  },
   geoContainer: {
     marginRight: 6,
+  },
+  clockContainer: {
+    marginRight: 7,
   },
   addressContainer : {
     display: 'flex',
@@ -104,6 +112,9 @@ const styles = StyleSheet.create({
   },
   address: {
     fontSize: 12,
+  },
+  time: {
+    paddingTop: 2,
   },
   header2: {
     fontSize: 14,
@@ -135,7 +146,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   accessibility: {
-    width: '55%',
+    width: 180,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -159,6 +170,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   threeRows: {
+    width: 135,
     height: '100%',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -183,10 +195,20 @@ function YesOrNo(props) {
     return <Text style={[styles.body, styles.bold]}>Yes</Text>;
   }
   else if (info === null) {
-    return <Text style={[styles.body, styles.bold]}>?</Text>;
+    return <Text style={[styles.body, styles.bold]}>No info</Text>;
   }
   else {
     return <Text style={[styles.body, styles.bold]}>No</Text>;
+  }
+}
+
+function Handicap(props) {
+  const info = props.input;
+  if (info) {
+    return <Text style={styles.body}>Accessible</Text>;
+  }
+  else {
+    return <Text style={styles.body}>Not accessible</Text>;
   }
 }
 
@@ -263,6 +285,7 @@ function ListScreen({ route, navigation }) {
                     endTime: item.endTime,
                     photography: item.photographyAllowed,
                     wheelchairAccessible: item.wheelchairAccessible,
+                    wheelchairAccessibleRestroom: item.wheelchairAccessibleRestroom,
                     restroomsAvailable: item.restroomsAvailable,
                   });
                 }}>
@@ -295,7 +318,7 @@ function DetailsScreen({ route, navigation }) {
       <Image source={{ uri: route.params.imageURL}} style={styles.detailPic}></Image>
       <View style={styles.detailsContainer}>
       <View style={[styles.box, styles.titleBox, styles.boxShadow]}>
-        <Text style={styles.header}>{route.params.building}</Text> 
+        <Text style={styles.header}>{route.params.building}</Text>
         <View style={[styles.align, styles.addressMargin]}>
           <View style={styles.geoContainer}>
             <GeoLocation width={20} height={20} color={darkblue} />
@@ -304,24 +327,32 @@ function DetailsScreen({ route, navigation }) {
             <Text style={[styles.body, styles.address]}>{route.params.fullAddress}</Text>
           </View>
         </View>
+        <View style={[styles.align, styles.timeMargin]}>
+          <View style={styles.clockContainer}>
+            <Clock width={17} height={20} color={darkblue} />
+          </View>
+          <View style={styles.addressContainer}>
+            <Text style={[styles.body, styles.address, styles.time]}>{route.params.startTime} - {route.params.endTime}</Text>
+          </View>
+        </View>
       </View>
 
       <View style={styles.twoColumn}>
         <View style={[styles.box, styles.boxShadow, styles.accessibility]}>
           <View style={styles.headerBottomBorder}>
-            <Text style={[styles.header, styles.header2]}>Accessibility</Text>
-          </View>
-          <View style={styles.accessibilityRow}>
-            <WheelChair style={styles.detailsIcons} width={20} height={20} color={darkblue} />
-            <Text style={styles.body}>Wheelchair: <YesOrNo input={route.params.wheelchairAccessible}/></Text>
+            <Text style={[styles.header, styles.header2]}>Restroom Access</Text>
           </View>
           <View style={styles.accessibilityRow}>
             <Toilet style={styles.detailsIcons} width={20} height={20} color={darkblue} />
             <Text style={styles.body}>Bathrooms: <YesOrNo input={route.params.restroomsAvailable}/></Text>
           </View>
           <View style={styles.accessibilityRow}>
+            <WheelChair style={styles.detailsIcons} width={20} height={20} color={darkblue} />
+            <Text style={styles.body}>Wheelchair: <YesOrNo input={route.params.wheelchairAccessibleRestroom}/></Text>
+          </View>
+          <View style={styles.accessibilityRow}>
             <GenderInclusive style={styles.detailsIcons} width={20} height={20} color={darkblue} />
-            <Text style={styles.body}>Gender inclusive: <YesOrNo input={null}/></Text>
+            <Text style={styles.body}>All-Gender: <YesOrNo input={null}/></Text>
           </View>
         </View>
         <View>
@@ -331,8 +362,8 @@ function DetailsScreen({ route, navigation }) {
               <Text style={styles.body}>{route.params.capacity} people</Text>
             </View>
             <View style={[styles.shortRows, styles.boxShadow]}>
-              <Text style={[styles.header, styles.header3]}>Hours</Text>
-              <Text style={styles.body}>{route.params.startTime} - {route.params.endTime}</Text>
+              <Text style={[styles.header, styles.header3]}>Handicap</Text>
+              <Handicap input={route.params.wheelchairAccessible}/>
             </View>
             <View style={[styles.shortRows, styles.boxShadow]}>
               <Text style={[styles.header, styles.header3]}>Photography</Text>
