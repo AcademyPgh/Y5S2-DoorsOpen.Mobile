@@ -1,14 +1,14 @@
-import React, { Component, useEffect, useState } from "react";
-import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, StyleSheet, TouchableWithoutFeedback, Appearance, Image, Platform } from 'react-native';
+import React, { Component, createRef, useEffect, useState } from "react";
+import { Button, View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, StyleSheet, TouchableWithoutFeedback, Appearance, Image, Platform, Linking } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toilet from "./assets/icons/toilet-solid.svg";
 import NoToilet from "./assets/icons/no-toilet-solid.svg";
 import WheelChair from "./assets/icons/wheelchair-solid.svg";
 import Camera from "./assets/icons/camera-solid.svg";
+import GenderInclusive from "./assets/icons/transgender-alt-solid.svg";
+import GeoLocation from "./assets/icons/geo-location.svg";
 
-
-// const colorScheme = Appearance.getColorScheme(); // this should get light/dark mode from the os i think? would put these palettes in an if statement somewhere for that
 const black = '#242325';
 const white = '#fff';
 const gray = '#d2d2d4';
@@ -18,6 +18,177 @@ const blue = '#23bdb9';
 const red = 'e45027';
 const darkblue = '#038a9c';
 const darkred = '#bd3712';
+
+const styles = StyleSheet.create({
+  homeHeader: {
+    height: 50, 
+    width: '100%', 
+    resizeMode: 'contain',
+    marginBottom: 4, 
+    marginTop: Platform.OS === 'ios' ? 40 : 4,
+  },
+  main: {
+    width: '100%',
+    backgroundColor: gray,
+  },
+  homeBuildingDisplay: {
+    height: 300,
+    marginTop: 10,
+    objectFit: 'cover',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  homeBuildingCard: {
+    borderBottomStartRadius: 4,
+    borderBottomEndRadius: 4,
+    borderTopEndRadius: 4,
+    borderTopStartRadius: 4,
+    width: '98%',
+    backgroundColor: white,
+    marginBottom: 10,
+    padding: 10,
+  },
+  boxShadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+  body: {
+    fontFamily: "Poppins-Regular",
+    color: "#696969",
+    fontSize: 13,
+  },
+  bold: {
+    fontWeight: "bold",
+  },
+  header: {
+    fontFamily: "Poppins-SemiBold",
+    color: black,
+    fontSize: 16,
+  },
+  align: {
+    flexDirection: 'row',
+    marginTop: 2,
+  },
+  leftContainer: {
+    width: '75%',
+  },
+  rightContainer: {
+    width: '25%',
+    flexDirection: 'row-reverse',
+  },
+  iconContainer: {
+    marginLeft: 15,
+  },
+  detailsContainer: {
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
+  addressMargin: {
+    marginTop: 6,
+    marginLeft: -5,
+  },
+  geoContainer: {
+    marginRight: 6,
+  },
+  addressContainer : {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  address: {
+    fontSize: 12,
+  },
+  header2: {
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  header3: {
+    fontSize: 13,
+  },
+  detailPic: {
+    height: 210,
+    width: '100%',
+    resizeMode: 'cover',
+  },
+  box: {
+    backgroundColor: white,
+    padding: 15,
+    marginBottom: 15,
+  },
+  titleBox: {
+    marginTop: -25,
+    borderColor: '#e45027', 
+    borderStyle: "solid",
+    borderTopWidth: 4,
+  },
+  twoColumn: {
+    height: 200,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+  },
+  accessibility: {
+    width: '55%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 0,
+  },
+  headerBottomBorder: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: gray, 
+    borderStyle: "solid",
+    borderBottomWidth: 2,
+  },
+  accessibilityRow: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  detailsIcons: {
+    marginRight: 5,
+  },
+  threeRows: {
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  shortRows: {
+    backgroundColor: white,
+    padding: 6,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  detailBox: {
+    borderColor: '#23bdb9', 
+    borderStyle: "solid",
+    borderTopWidth: 4,
+  }
+})
+
+function YesOrNo(props) {
+  const info = props.input;
+  if (info) {
+    return <Text style={[styles.body, styles.bold]}>Yes</Text>;
+  }
+  else if (info === null) {
+    return <Text style={[styles.body, styles.bold]}>?</Text>;
+  }
+  else {
+    return <Text style={[styles.body, styles.bold]}>No</Text>;
+  }
+}
 
 function WheelChairDisplay(props) {
   const isHandicap = props.isHandicap;
@@ -35,190 +206,21 @@ function CameraDisplay(props) {
   return null;
 }
 
+function PhotographyDisplay(props) {
+  const allowsPhotoghraphy = props.allowsPhotoghraphy;
+  if (allowsPhotoghraphy) {
+    return <Text>Allowed</Text>;
+  }
+  return <Text>Not Allowed</Text>;
+}
+
 function BathroomDisplay(props) {
   const hasBathroom = props.hasBathroom;
   if (hasBathroom) {
-    return <Toilet style={styles.iconContainer} width={20} height={20} color={darkblue} />;
+    return <Toilet style={{marginLeft: 10}} width={20} height={20} color={darkblue} />;
   }
-  return <NoToilet width={20} height={20} color={darkblue} />;
+  return <NoToilet style={{marginLeft: 7}} width={22} height={20} color={darkred} />;
 }
-
-function BodyText(props) {
-  return (
-    <Text style={styles.body}>
-      {props.children}
-    </Text>
-  );
-}
-
-function HeaderText(props) {
-  var output;
-  if(props.children.length > 40) {
-    output = props.children.substring(0, 40) + "...";
-  }
-  else {
-    output = props.children;
-  }
-
-  return (
-    <Text style={styles.header}>
-      {output}
-    </Text>
-  );
-}
-
-const styles = StyleSheet.create({
-  homeHeader: {
-    height: 50, 
-    width: '100%', 
-    resizeMode: 'contain',
-    marginBottom: 4, 
-    marginTop: Platform.OS === 'ios' ? 40 : 4,
-  },
-  homeFlatList: {
-    width: '100%',
-    backgroundColor: gray,
-  },
-  homeBuildingDisplay: {
-    width: '100%',
-    height: 300,
-    marginTop: 10,
-    objectFit: 'cover',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  homeBuildingCard: {
-    borderBottomStartRadius: 4,
-    borderBottomEndRadius: 4,
-    borderTopEndRadius: 4,
-    borderTopStartRadius: 4,
-    width: '98%',
-    backgroundColor: white,
-    marginBottom: 10,
-    padding: 10,
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-
-    elevation: 4,
-  },
-  body: {
-    fontFamily: "Poppins-Regular",
-    color: black,
-    fontSize: 13,
-  },
-  header: {
-    fontFamily: "Poppins-SemiBold",
-    color: black,
-    fontSize: 16,
-  },
-  header2: {
-    fontFamily: "Poppins-SemiBold",
-    color: black,
-    fontSize: 16,
-    marginTop: 15,
-    marginLeft: 20,
-    marginRight: 15,
-    marginBottom: 5,
-  },
-  header3: {
-    fontFamily: "Poppins-SemiBold",
-    color: black,
-    fontSize: 14,
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 15,
-    marginBottom: 5,
-  },
-  header4: {
-    fontFamily: "Poppins-SemiBold",
-    color: black,
-    fontSize: 14,
-    marginTop: 10,
-    textAlign: "center",
-
-  },
-  align: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  leftContainer: {
-    width: '50%',
-
-  },
-  rightContainer: {
-    width: '50%',
-    flexDirection: 'row-reverse',
-  },
-  iconContainer: {
-    marginLeft: 15,
-  },
-  details: {
-    flex: 1, 
-  },
-  detailPic: {
-    height: 210,
-    minWidth: '100%',
-    resizeMode: 'cover',
-  },
-  genBody: {
-    marginLeft: 20,
-    marginRight: 15,
-    lineHeight: 20,
-    paddingBottom: 10,
-  },
-  address: {
-    marginLeft: 20,
-    marginRight: 20,
-    lineHeight: 18,
-    paddingBottom: 5,
-    fontSize: 14,
-  },
-  detailTitleBox: {
-    backgroundColor: white,
-    paddingBottom: 10,
-    margin: 15,
-    marginTop: -25,
-    marginBottom: 5,
-    borderColor: '#e45027', 
-    borderStyle: "solid",
-    borderTopWidth: 4,
-  },
-  detailBox: {
-    backgroundColor: white,
-    paddingTop: 5,
-    paddingBottom: 10,
-    margin: 15,
-    marginTop: 5,
-    marginBottom: 5,
-    borderColor: '#23bdb9', 
-    borderStyle: "solid",
-    borderTopWidth: 4,
-  },
-  twoColumn: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingBottom: 5,
-  },
-  threeRows: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  shortRows: {
-    backgroundColor: white,
-    marginRight: 15,
-    marginTop: 3,
-    textAlign: "center",
-  }
-})
 
 function ListScreen({ route, navigation }) {
   const [isLoading, setLoading] = useState(true);
@@ -244,7 +246,7 @@ function ListScreen({ route, navigation }) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       {isLoading ? <ActivityIndicator /> : (
         <FlatList
-          style={styles.homeFlatList}
+          style={styles.main}
           data={data}
           renderItem={
             ({ item }) =>
@@ -255,23 +257,21 @@ function ListScreen({ route, navigation }) {
                     historicalOverview: item.historicalOverview,
                     visitorExperience: item.visitorExperience,
                     imageURL: item.imageURL,
-                    address1: item.address1,
-                    address2: item.address2,
-                    city: item.city,
-                    state: item.state,
-                    zip: item.zip,
+                    fullAddress: item.fullAddress,
                     capacity: item.capacity,
                     startTime: item.startTime,
                     endTime: item.endTime,
                     photography: item.photographyAllowed,
+                    wheelchairAccessible: item.wheelchairAccessible,
+                    restroomsAvailable: item.restroomsAvailable,
                   });
                 }}>
                 <ImageBackground source={{ uri: item.imageURL }} style={styles.homeBuildingDisplay}>
-                  <View style={styles.homeBuildingCard}>
-                    <HeaderText>{item.building}</HeaderText>
+                  <View style={[styles.homeBuildingCard, styles.boxShadow]}>
+                    <Text style={styles.header}>{item.building}</Text>
                     <View style={styles.align}>
                       <View style={styles.leftContainer}>
-                        <BodyText>{item.address1}</BodyText>
+                        <Text style={styles.body}>{item.address1}</Text>
                       </View>
                       <View style={styles.rightContainer}>
                         <BathroomDisplay hasBathroom={item.restroomsAvailable}/>
@@ -291,59 +291,67 @@ function ListScreen({ route, navigation }) {
 
 function DetailsScreen({ route, navigation }) {
   return (
-    <ScrollView style={styles.details}>
+    <ScrollView>
       <Image source={{ uri: route.params.imageURL}} style={styles.detailPic}></Image>
-      
-      <View style={styles.detailTitleBox}>
-        <Text style={styles.header2}>{route.params.building}</Text> 
-        <View style={styles.twoColumn}> 
-          <View style={{paddingTop: 4}}>
-            <Text style={styles.address}>{route.params.address1}</Text>
-            <Text style={styles.address}>{route.params.address2}</Text>
+      <View style={styles.detailsContainer}>
+      <View style={[styles.box, styles.titleBox, styles.boxShadow]}>
+        <Text style={styles.header}>{route.params.building}</Text> 
+        <View style={[styles.align, styles.addressMargin]}>
+          <View style={styles.geoContainer}>
+            <GeoLocation width={20} height={20} color={darkblue} />
           </View>
-          <View style={{paddingTop: 4}}>
-            <Text style={styles.address}>{route.params.city}</Text>
-            <Text style={styles.address}>{route.params.state}</Text>
+          <View style={styles.addressContainer}>
+            <Text style={[styles.body, styles.address]}>{route.params.fullAddress}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.twoColumn}>
-        <View style={{backgroundColor: white, marginLeft: 15, marginTop: 3, textAlign: "center", width: "50%",}}>
-          <Text style={styles.header4}>Accessibility</Text>
+        <View style={[styles.box, styles.boxShadow, styles.accessibility]}>
+          <View style={styles.headerBottomBorder}>
+            <Text style={[styles.header, styles.header2]}>Accessibility</Text>
+          </View>
+          <View style={styles.accessibilityRow}>
+            <WheelChair style={styles.detailsIcons} width={20} height={20} color={darkblue} />
+            <Text style={styles.body}>Wheelchair: <YesOrNo input={route.params.wheelchairAccessible}/></Text>
+          </View>
+          <View style={styles.accessibilityRow}>
+            <Toilet style={styles.detailsIcons} width={20} height={20} color={darkblue} />
+            <Text style={styles.body}>Bathrooms: <YesOrNo input={route.params.restroomsAvailable}/></Text>
+          </View>
+          <View style={styles.accessibilityRow}>
+            <GenderInclusive style={styles.detailsIcons} width={20} height={20} color={darkblue} />
+            <Text style={styles.body}>Gender inclusive: <YesOrNo input={null}/></Text>
+          </View>
         </View>
         <View>
           <View style={styles.threeRows}>
-            <View style={styles.shortRows} >
-              <Text style={styles.header4}>Capacity</Text>
-              <Text style={{textAlign: "center", paddingBottom: 12}}>{route.params.capacity}</Text>
+            <View style={[styles.shortRows, styles.boxShadow]}>
+              <Text style={[styles.header, styles.header3]}>Capacity</Text>
+              <Text style={styles.body}>{route.params.capacity} people</Text>
             </View>
-            <View style={styles.shortRows}>
-              <Text style={styles.header4}>Hours</Text>
-              <Text style={{textAlign: "center", paddingBottom: 12}}>{route.params.startTime} - {route.params.endTime}</Text>
+            <View style={[styles.shortRows, styles.boxShadow]}>
+              <Text style={[styles.header, styles.header3]}>Hours</Text>
+              <Text style={styles.body}>{route.params.startTime} - {route.params.endTime}</Text>
             </View>
-            <View style={styles.shortRows}>
-              <Text style={styles.header3}>Photography</Text>
-              <Text style={{textAlign: "center", paddingBottom: 12}}>{route.params.photography}</Text>
+            <View style={[styles.shortRows, styles.boxShadow]}>
+              <Text style={[styles.header, styles.header3]}>Photography</Text>
+              <PhotographyDisplay allowsPhotoghraphy={route.params.photography}/>
             </View>
           </View>
         </View>
-        {/* Need to add accessibility, capacity, hours, and photography */}
       </View>
       
-      <View style={styles.detailBox}>
-        <Text style={styles.header3}>Visitor Experience</Text>
-        <Text style={styles.genBody}>{route.params.historicalOverview}</Text>
+      <View style={[styles.box, styles.detailBox, styles.boxShadow]}>
+        <Text style={[styles.header, styles.header2]}>Visitor Experience</Text>
+        <Text style={styles.body}>{route.params.historicalOverview}</Text>
       </View>
-      <View style={styles.detailBox}>
-        <Text style={styles.header3}>History</Text>
-        <Text style={styles.genBody}>{route.params.visitorExperience}</Text>
+      <View style={[styles.box, styles.detailBox, styles.boxShadow]}>
+        <Text style={[styles.header, styles.header2]}>History</Text>
+        <Text style={styles.body}>{route.params.visitorExperience}</Text>
       </View>
 
-      <View style={{height: 10}}></View> 
-      {/* just adds some height to the bottom */}
-
-      {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
+      </View>
     </ScrollView>
   );
 }
