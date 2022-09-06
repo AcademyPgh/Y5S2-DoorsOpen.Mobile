@@ -22,11 +22,15 @@ const darkred = '#bd3712';
 
 const styles = StyleSheet.create({
   homeHeader: {
-    height: 50, 
+    height: 90, 
     width: '100%', 
     resizeMode: 'contain',
-    marginBottom: 4, 
+    marginBottom: 8, 
     marginTop: Platform.OS === 'ios' ? 40 : 4,
+  },
+  holder: {
+    width: '100%',
+    backgroundColor: white,
   },
   main: {
     width: '100%',
@@ -62,7 +66,7 @@ const styles = StyleSheet.create({
   },
   body: {
     fontFamily: "Poppins-Regular",
-    color: "#696969",
+    color: black,
     fontSize: 13,
   },
   bold: {
@@ -390,7 +394,10 @@ function DetailsScreen({ route, navigation }) {
 const Stack = createNativeStackNavigator();
 
 function LogoTitle() {
-  return (<Image source={require('./assets/images/dooropen.jpg')} style={styles.homeHeader} />)
+  return (
+  <View style={styles.holder}>
+  <Image source={require('./assets/images/dooropen.jpg')} style={styles.homeHeader} />
+  </View>)
 }
 
 function App() {
