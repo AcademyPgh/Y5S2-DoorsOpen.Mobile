@@ -9,6 +9,8 @@ import Camera from "./assets/icons/camera-solid.svg";
 import GenderInclusive from "./assets/icons/transgender-alt-solid.svg";
 import GeoLocation from "./assets/icons/geo-location.svg";
 import Clock from "./assets/icons/clock.svg";
+//import { LinearGradient } from "react-native-svg";
+import LinearGradient from 'react-native-linear-gradient';
 
 const black = '#242325';
 const white = '#fff';
@@ -16,7 +18,7 @@ const gray = '#d2d2d4';
 const lightgray = '#dcdcdc';
 
 const blue = '#23bdb9';
-const red = 'e45027';
+const red = '#e45027';
 const darkblue = '#038a9c';
 const darkred = '#bd3712';
 
@@ -34,7 +36,10 @@ const styles = StyleSheet.create({
   },
   main: {
     width: '100%',
-    backgroundColor: gray,
+  },
+  linearGradient: {
+    height: '100%',
+    width: '100%',
   },
   homeBuildingDisplay: {
     height: 300,
@@ -271,6 +276,7 @@ function ListScreen({ route, navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       {isLoading ? <ActivityIndicator /> : (
+        <LinearGradient colors={[white, red]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
         <FlatList
           style={styles.main}
           data={data}
@@ -311,6 +317,7 @@ function ListScreen({ route, navigation }) {
               </TouchableWithoutFeedback>
           }
         />
+        </LinearGradient>
       )}
     </View>
   );
