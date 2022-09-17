@@ -273,7 +273,7 @@ function ListScreen({ route, navigation }) {
   }, []);
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 15 }}>
       {isLoading ? <ActivityIndicator /> : (
         <LinearGradient colors={[blue, gray, red]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
         <FlatList
@@ -325,7 +325,7 @@ function ListScreen({ route, navigation }) {
 function DetailsScreen({ route, navigation }) {
   return (
     <ScrollView>
-      <LinearGradient colors={[blue, gray, red]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
+      <LinearGradient colors={['#8ccccb', gray, '#d5b8b1' ]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
       <Image source={{ uri: route.params.imageURL}} style={styles.detailPic}></Image>
       <View style={styles.detailsContainer}>
       <View style={[styles.box, styles.titleBox, styles.boxShadow]}>
