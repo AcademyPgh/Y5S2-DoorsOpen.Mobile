@@ -86,10 +86,13 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   leftContainer: {
-    width: '75%',
+    width: '45%',
+  },
+  middleContainer: {
+    width: '40%',
   },
   rightContainer: {
-    width: '25%',
+    width: '15%',
     flexDirection: 'row-reverse',
   },
   iconContainer: {
@@ -304,6 +307,9 @@ function ListScreen({ route, navigation }) {
                     <View style={styles.align}>
                       <View style={styles.leftContainer}>
                         <Text style={styles.body}>{item.address1}</Text>
+                      </View>
+                      <View style={styles.middleContainer}>
+                        <Text style={styles.body}>{item.startTime}-{item.endTime}</Text>
                       </View>
                       <View style={styles.rightContainer}>
                         <BathroomDisplay hasBathroom={item.restroomsAvailable}/>
