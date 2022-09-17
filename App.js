@@ -275,7 +275,7 @@ function ListScreen({ route, navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       {isLoading ? <ActivityIndicator /> : (
-        <LinearGradient colors={[blue, gray, red]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
+        <LinearGradient colors={['#8ccccb', gray, '#d5b8b1']} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
         <FlatList
           style={styles.main}
           data={data}
