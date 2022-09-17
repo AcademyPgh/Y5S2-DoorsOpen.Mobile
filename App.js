@@ -9,7 +9,6 @@ import Camera from "./assets/icons/camera-solid.svg";
 import GenderInclusive from "./assets/icons/transgender-alt-solid.svg";
 import GeoLocation from "./assets/icons/geo-location.svg";
 import Clock from "./assets/icons/clock.svg";
-//import { LinearGradient } from "react-native-svg";
 import LinearGradient from 'react-native-linear-gradient';
 
 const black = '#242325';
@@ -276,7 +275,7 @@ function ListScreen({ route, navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       {isLoading ? <ActivityIndicator /> : (
-        <LinearGradient colors={[white, red]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
+        <LinearGradient colors={[blue, gray, red]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
         <FlatList
           style={styles.main}
           data={data}
@@ -326,6 +325,7 @@ function ListScreen({ route, navigation }) {
 function DetailsScreen({ route, navigation }) {
   return (
     <ScrollView>
+      <LinearGradient colors={[blue, gray, red]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
       <Image source={{ uri: route.params.imageURL}} style={styles.detailPic}></Image>
       <View style={styles.detailsContainer}>
       <View style={[styles.box, styles.titleBox, styles.boxShadow]}>
@@ -394,6 +394,7 @@ function DetailsScreen({ route, navigation }) {
       </View>
 
       </View>
+      </LinearGradient>
     </ScrollView>
   );
 }
