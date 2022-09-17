@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   homeBuildingDisplay: {
     height: 300,
-    marginTop: 10,
+    marginTop: 15,
     objectFit: 'cover',
     display: 'flex',
     alignItems: 'center',
@@ -273,7 +273,7 @@ function ListScreen({ route, navigation }) {
   }, []);
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 15 }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       {isLoading ? <ActivityIndicator /> : (
         <LinearGradient colors={[blue, gray, red]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
         <FlatList
