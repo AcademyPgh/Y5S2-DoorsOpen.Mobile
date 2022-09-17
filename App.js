@@ -239,9 +239,9 @@ function CameraDisplay(props) {
 function PhotographyDisplay(props) {
   const allowsPhotoghraphy = props.allowsPhotoghraphy;
   if (allowsPhotoghraphy) {
-    return <Text>Allowed</Text>;
+    return <Text style={styles.body} >Allowed</Text>;
   }
-  return <Text>Not Allowed</Text>;
+  return <Text style={styles.body} >Not Allowed</Text>;
 }
 
 function BathroomDisplay(props) {
