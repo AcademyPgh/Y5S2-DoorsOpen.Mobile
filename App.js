@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: '100%',
+    marginTop: 10,
   },
   linearGradient: {
     height: '100%',
