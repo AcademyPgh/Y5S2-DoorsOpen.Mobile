@@ -86,10 +86,10 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   leftContainer: {
-    width: '45%',
+    width: '44%',
   },
   middleContainer: {
-    width: '40%',
+    width: '41%',
   },
   rightContainer: {
     width: '15%',
