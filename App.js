@@ -9,6 +9,7 @@ import Camera from "./assets/icons/camera-solid.svg";
 import GenderInclusive from "./assets/icons/transgender-alt-solid.svg";
 import GeoLocation from "./assets/icons/geo-location.svg";
 import Clock from "./assets/icons/clock.svg";
+import LinearGradient from 'react-native-linear-gradient';
 
 const black = '#242325';
 const white = '#fff';
@@ -16,25 +17,33 @@ const gray = '#d2d2d4';
 const lightgray = '#dcdcdc';
 
 const blue = '#23bdb9';
-const red = 'e45027';
+const red = '#e45027';
 const darkblue = '#038a9c';
 const darkred = '#bd3712';
 
 const styles = StyleSheet.create({
   homeHeader: {
-    height: 50, 
+    height: 90, 
     width: '100%', 
     resizeMode: 'contain',
-    marginBottom: 4, 
+    marginBottom: 8, 
     marginTop: Platform.OS === 'ios' ? 40 : 4,
+  },
+  holder: {
+    width: '100%',
+    backgroundColor: white,
   },
   main: {
     width: '100%',
-    backgroundColor: gray,
+    marginTop: 10,
+  },
+  linearGradient: {
+    height: '100%',
+    width: '100%',
   },
   homeBuildingDisplay: {
     height: 300,
-    marginTop: 10,
+    marginTop: 15,
     objectFit: 'cover',
     display: 'flex',
     alignItems: 'center',
@@ -62,7 +71,7 @@ const styles = StyleSheet.create({
   },
   body: {
     fontFamily: "Poppins-Regular",
-    color: "#696969",
+    color: black,
     fontSize: 13,
   },
   bold: {
@@ -78,10 +87,13 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   leftContainer: {
-    width: '75%',
+    width: '44%',
+  },
+  middleContainer: {
+    width: '41%',
   },
   rightContainer: {
-    width: '25%',
+    width: '15%',
     flexDirection: 'row-reverse',
   },
   iconContainer: {
@@ -231,9 +243,9 @@ function CameraDisplay(props) {
 function PhotographyDisplay(props) {
   const allowsPhotoghraphy = props.allowsPhotoghraphy;
   if (allowsPhotoghraphy) {
-    return <Text>Allowed</Text>;
+    return <Text style={styles.body} >Allowed</Text>;
   }
-  return <Text>Not Allowed</Text>;
+  return <Text style={styles.body} >Not Allowed</Text>;
 }
 
 function BathroomDisplay(props) {
@@ -265,8 +277,9 @@ function ListScreen({ route, navigation }) {
   }, []);
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       {isLoading ? <ActivityIndicator /> : (
+        <LinearGradient colors={['#8ccccb', gray, '#d5b8b1']} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
         <FlatList
           style={styles.main}
           data={data}
@@ -296,6 +309,9 @@ function ListScreen({ route, navigation }) {
                       <View style={styles.leftContainer}>
                         <Text style={styles.body}>{item.address1}</Text>
                       </View>
+                      <View style={styles.middleContainer}>
+                        <Text style={styles.body}>{item.startTime}-{item.endTime}</Text>
+                      </View>
                       <View style={styles.rightContainer}>
                         <BathroomDisplay hasBathroom={item.restroomsAvailable}/>
                         <WheelChairDisplay isHandicap={item.wheelchairAccessible}/>
@@ -307,6 +323,7 @@ function ListScreen({ route, navigation }) {
               </TouchableWithoutFeedback>
           }
         />
+        </LinearGradient>
       )}
     </View>
   );
@@ -315,6 +332,7 @@ function ListScreen({ route, navigation }) {
 function DetailsScreen({ route, navigation }) {
   return (
     <ScrollView>
+      <LinearGradient colors={['#8ccccb', gray, '#d5b8b1' ]} style={styles.linearGradient} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}>
       <Image source={{ uri: route.params.imageURL}} style={styles.detailPic}></Image>
       <View style={styles.detailsContainer}>
       <View style={[styles.box, styles.titleBox, styles.boxShadow]}>
@@ -383,6 +401,7 @@ function DetailsScreen({ route, navigation }) {
       </View>
 
       </View>
+      </LinearGradient>
     </ScrollView>
   );
 }
@@ -390,7 +409,10 @@ function DetailsScreen({ route, navigation }) {
 const Stack = createNativeStackNavigator();
 
 function LogoTitle() {
-  return (<Image source={require('./assets/images/dooropen.jpg')} style={styles.homeHeader} />)
+  return (
+  <View style={styles.holder}>
+  <Image source={require('./assets/images/dooropen.jpg')} style={styles.homeHeader} />
+  </View>)
 }
 
 function App() {
